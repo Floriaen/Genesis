@@ -1,4 +1,4 @@
-/* global _Element, G, MyElements, sprite, E, M, Canvas */
+/* global _Element, G, Me, sprite, E, M, Canvas */
 /* jshint unused: false */
 var Eye = _Element.extend({
 	initialize: function() {

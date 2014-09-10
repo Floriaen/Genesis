@@ -1,27 +1,27 @@
-/* global _Element, G, MyElements, Rock, Water, Earth */
+/* global _Element, G, Me, Rock, Water, Earth */
 /* jshint unused: false */
 var Ice = _Element.extend({
 	initialize: function(x, y) {
 		_Element.initialize.call(this, x, y);
 		this.cost = 2;
-		this.type = MyElements.ICE;
+		this.type = Me.ICE;
 	},
 	collide: function(e) {
 		_Element.collide.call(this, e);
 		switch (e.type) {
-			case MyElements.LAVA:
-			case MyElements.FIRE:
+			case Me.LAVA:
+			case Me.FIRE:
 				this.replace(Water);
 			break;
-			case MyElements.GRASS:
+			case Me.GRASS:
 				e.replace(Earth);
 			break;
-			case MyElements.WATER:
+			case Me.WATER:
 				e.replace(Ice);
 			break;
-			case MyElements.AIR:
-			case MyElements.HEAD_PLANTS:
-			case MyElements.PLANTS:
+			case Me.AIR:
+			case Me.HEAD_PLANTS:
+			case Me.PLANTS:
 				G.remove(e);
 			break;
 		}

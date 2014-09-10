@@ -1,5 +1,5 @@
 /* jshint unused: false */
-/* global _Element, ElementFactory, MyElements, Input, M, E, Grid, startup, sprite,
+/* global _Element, ElementFactory, Me, Input, M, E, Grid, startup, sprite,
 Grass, score, Water, Flower, Grass, Earth, Plants, Fire, Rock, Eye, Ice, HeadPlants, level, Lava, MyColors, Canvas */
 var G = {
 	width: 0,
@@ -68,10 +68,10 @@ var G = {
 
 	_initShadows: function() {
 		var e = null;
-		for (var el in MyElements) {
+		for (var el in Me) {
 			var c = Canvas.get(10, 10);
 			Canvas.pixelate(c);
-			e = MyElements[el];
+			e = Me[el];
 
 			var x = ((e - 1) % (sprite.width / E)) * E;
 			var y = M.floor((e - 1) / (sprite.width / E)) * E;

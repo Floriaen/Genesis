@@ -10,35 +10,35 @@ var M = Math,
 	Z = 0.1, // Zero
 	sprite, startup, score, glasspane, level;
 
-var MyElements = {};
-MyElements.EMPTY = 0;
-MyElements.WATER = 1;
-MyElements.FIRE = 2;
-MyElements.EARTH = 3;
-MyElements.ROCK = 4;
-MyElements.AIR = 5;
-MyElements.GRASS = 6;
-MyElements.PLANTS = 7;
-MyElements.HEAD_PLANTS = 8;
-MyElements.FLOWER = 9;
-MyElements.LAVA = 10;
-MyElements.ICE = 11;
-MyElements.FIRE_BASE = 42;
-MyElements.BURNED_PLANTS = 13;
-MyElements.BURNED_GRASS = 14;
-MyElements.CLOUD = 17;
+var Me = {};
+Me.EMPTY = 0;
+Me.WATER = 1;
+Me.FIRE = 2;
+Me.EARTH = 3;
+Me.ROCK = 4;
+Me.AIR = 5;
+Me.GRASS = 6;
+Me.PLANTS = 7;
+Me.HEAD_PLANTS = 8;
+Me.FLOWER = 9;
+Me.LAVA = 10;
+Me.ICE = 11;
+Me.FIRE_BASE = 42;
+Me.BURNED_PLANTS = 13;
+Me.BURNED_GRASS = 14;
+Me.CLOUD = 17;
 
 
 // for random generation
-MyElements.g = [
-	MyElements.EARTH,
-	MyElements.EARTH,
-	MyElements.EARTH,
-	MyElements.WATER,
-	MyElements.WATER,
-	MyElements.FIRE,
-	MyElements.FIRE,
-	MyElements.AIR
+Me.g = [
+	Me.EARTH,
+	Me.EARTH,
+	Me.EARTH,
+	Me.WATER,
+	Me.WATER,
+	Me.FIRE,
+	Me.FIRE,
+	Me.AIR
 ];
 
 function tic(dt) {

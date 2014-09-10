@@ -1,24 +1,24 @@
-/* global M, MyElements, Air, Earth, Fire, Rock, Water */
+/* global M, Me, Air, Earth, Fire, Rock, Water */
 /* jshint unused: false */
 var ElementFactory = {
 	c: 0,
 	getRandom: function(x, y) {
 		var e = null;
-		var r = MyElements.g[~~(M.random() * MyElements.g.length)];
+		var r = Me.g[~~(M.random() * Me.g.length)];
 		switch (r) {
-			case MyElements.AIR:
+			case Me.AIR:
 				e = Air.new(x, y);
 			break;
-			case MyElements.EARTH:
+			case Me.EARTH:
 				e = Earth.new(x, y);
 			break;
-			case MyElements.FIRE:
+			case Me.FIRE:
 				e = Fire.new(x, y);
 			break;
-			case MyElements.ROCK:
+			case Me.ROCK:
 				e = Rock.new(x, y);
 			break;
-			case MyElements.WATER:
+			case Me.WATER:
 				e = Water.new(x, y);
 			break;
 		}

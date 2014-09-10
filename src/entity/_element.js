@@ -1,4 +1,4 @@
-/* global Base, G, MyElements, M, E, sprite, Z, Shadows */
+/* global Base, G, Me, M, E, sprite, Z, Shadows */
 /* jshint unused: false */
 var _Element = Base.extend({
 	initialize: function(x, y) {

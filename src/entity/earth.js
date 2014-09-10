@@ -1,28 +1,28 @@
-/* global _Element, G, MyElements, Rock */
+/* global _Element, G, Me, Rock */
 /* jshint unused: false */
 var Earth = _Element.extend({
 	initialize: function(x, y) {
 		_Element.initialize.call(this, x, y);
-		this.type = MyElements.EARTH;
+		this.type = Me.EARTH;
 	},
 	collide: function(e) {
 		_Element.collide.call(this, e);
 		switch (e.type) {
-			case MyElements.LAVA:
-			case MyElements.FIRE:
+			case Me.LAVA:
+			case Me.FIRE:
 				this.replace(Rock);
 				G.remove(e);
 			break;
-			case MyElements.GRASS:
+			case Me.GRASS:
 				e.replace(Earth);
 			break;
-			case MyElements.AIR:
+			case Me.AIR:
 				if (e.pressure === 0) {
 					e.pressure = 3;
 				}
 			break;
-			case MyElements.HEAD_PLANTS:
-			case MyElements.PLANTS:
+			case Me.HEAD_PLANTS:
+			case Me.PLANTS:
 				G.remove(e);
 				this.y += 1;
 			break;

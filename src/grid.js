@@ -1,4 +1,4 @@
-/* global MyElements */
+/* global Me */
 function Grid(c, r) {
 	console.log('New grid', c, r);
 	this.cells = [];
@@ -35,7 +35,7 @@ Grid.prototype = {
 
 	_isChainAllowed: function(chain) {
 		var tk = chain.replace('.', '') * 1;
-		return MyElements.g.indexOf(tk) === -1;
+		return Me.g.indexOf(tk) === -1;
 	},
 
 	getChain: function() {
