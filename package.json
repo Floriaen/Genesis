@@ -1,0 +1,27 @@
+{
+  "name": "Rush",
+  "title": "Rush",
+  "description": "js13k 2014 game",
+  "version": "0.1.0",
+  "homepage": "http://floriaen.fr/genesis",
+  "author": {
+    "name": "Floriaen",
+    "email": "floriaen@gmail.com",
+    "url": "http://floriaen.fr"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/Florian/genesis.git"
+  },
+  "bugs": "https://github.com/Florian/genesis/issues",
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://floriaen.fr/genesis/blob/master/LICENSE-MIT"
+    }
+  ],
+  "keywords": [],
+  "devDependencies": {
+    "grunt-contrib-copy": "^0.5.0"
+  }
+}
