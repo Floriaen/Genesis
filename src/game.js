@@ -1,6 +1,6 @@
 /* jshint unused: false */
 /* global _Element, ElementFactory, Me, Input, M, E, Grid, startup, sprite,
-Grass, score, Water, Flower, Grass, Earth, Plants, Fire, Rock, Eye, Ice, HeadPlants, level, Lava, MyColors, Canvas */
+Grass, score, Water, Flower, Grass, Earth, Plants, Fire, Rock, Eye, Ice, HeadPlants, level, Lava, Canvas */
 var G = {
 	width: 0,
 	height: 0,
