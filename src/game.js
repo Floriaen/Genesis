@@ -31,6 +31,8 @@ var G = {
 
 	shadows: {},
 
+	dx: 0,
+
 	level: 0,
 	levels: [
 		{
@@ -272,7 +274,10 @@ var G = {
 		} 
 
 		if (wait === false && this.requestNewCurrentElement <= 0) {
-			//if (dx === 0) dx = this.dx;
+			if (dx === 0) {
+				dx = this.dx;
+				this.dx = 0;
+			}
 			
 			// current element:
 			if (this.ce === null) {
@@ -304,17 +309,16 @@ var G = {
 							//a.play();
 
 						} else {
-							e.cy += 0.5;
+							e.cy += 1;//0.5;
 						}
 					} else {
 						e.cx += dx;
-						e.cy += 0.5;
+						e.cy += 1;// 0.5;
 					}					
+				} else {
+					this.dx = dx;
 				}
-				
 			}
-		} else {
-			//this.dx = dx;
 		}
 
 		level.innerHTML = "LEVEL " + (this.level + 1);
