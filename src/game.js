@@ -1,6 +1,6 @@
 /* jshint unused: false */
-/* global _Element, ElementFactory, Me, Input, M, E, Grid, startup, sprite,
-Grass, score, Water, Flower, Grass, Earth, Plants, Fire, Rock, Eye, Ice, HeadPlants, level, Lava, Canvas */
+/* global _Element, ElementFactory, Me, Input, M, document.$, E, Grid, startup, sprite,
+Grass, score, Water, Flower, Grass, Earth, Region, Plants, Fire, Rock, Eye, Ice, HeadPlants, level, Lava, Canvas */
 var G = {
 	width: 0,
 	height: 0,
@@ -20,7 +20,7 @@ var G = {
 	ceDelay: 0.1,
 
 	ce: null,
-	requestNewCurrentElement: 0,
+	requestElement: 0,
 
 	_cleanRequested: false,
 
@@ -163,13 +163,18 @@ var G = {
 	},
 
 	displayCount: function(x, y, v) {
+		console.log('displayCount', x, y, v);
 		var c = document.createElement('div');
-		c.innerHTML = v;
+		c.innerHTML = '+ ' + v;
+		c.style.fontSize = '20px';
 		c.style.position = "absolute";
 		c.style.left = x + "px";
 		c.style.top = y + "px";
 		c.style.color = 'white';
-		document.getElementById('gameContent').appendChild(c);
+		document.$('gameContent').appendChild(c);
+		setTimeout(function() {
+			document.$('gameContent').removeChild(c);
+		}, 800);
 	},
 
 	update: function(dt) {
@@ -185,8 +190,8 @@ var G = {
 		for (i = this.level; i < this.levels.length - 1; i++) {
 			cl = this.levels[i];
 			if (ElementFactory.c > cl.elementCount) {
-				console.log('UP', 'current', ElementFactory.c, 'limit', cl.elementCount);
-				//this.level = i + 1;
+				//console.log('UP', 'current', ElementFactory.c, 'limit', cl.elementCount);
+				this.level = i + 1;
 				break;
 			}
 		}
@@ -198,7 +203,6 @@ var G = {
 			this._cleanEntities();
 		}
 
-		var e = this.ce;
 		var l = this.entities.length;
 		var c = null;
 
@@ -233,88 +237,102 @@ var G = {
 			}	
 		}
 		
+		if (this.requestElement > 0) {
+			this.requestElement -= dt;
+			if (this.requestElement <= 0) {
+				if (this.ce) {
+					this.ce.free();
+					this.ce = null; // next frame a new element will be spawn
+				}
 
-		var wait = false;
-		if (this.requestNewCurrentElement > 0) {
-			this.requestNewCurrentElement -= dt;
-			if (this.requestNewCurrentElement <= 0) {
-				this.ce.free();
-				this.ce = null; // next frame a new element will be spawn
-
+				var polygon = [];
 				var el = null, cost = 0, x = 0, y = 0;
 				var chain = this.grid.getChain();
 				for (i = 0; i < chain.length; i++) {
-					cost = 0;
 					for (var j = 0; j < chain[i].length; j++) {
 						if (chain[i][j] === 1) {
 							el = this.get(j, i);
 							if (el) {
+								polygon.push({x: j, y: i});
 								el.selected = true;
 								cost += el.cost;
-								wait = true;
 							} 
 						}
 					}
+				}
 
-					if (cost > 0) {
-						this.displayCount(j * E, i * E, cost);
-						G.score += cost;
-					}
+				if (cost > 0) {
+					var ct = null;
+					if (polygon.length === 1) {
+						ct = polygon[0];
+					} else {
+						var region = new Region(polygon);
+						ct = region.centroid();
+						if (isNaN(ct.x) || isNaN(ct.y)) {
+							ct = polygon[0];
+						}
+ 					}
+					this.displayCount(ct.x * E * G.scale, ct.y * E * G.scale, cost);
+					G.score += cost;
 				}
 			}
 		}		
 
-		if (e) e.gravity = (Input.keys.d) ? 20: 0;
-		
-		var dx = 0;
-		if (Input.keys.r) {
-			dx = 1;
-		} else if (Input.keys.l) {
-			dx = -1;
-		} 
+		if (this.ce) this.ce.gravity = (Input.keys.d) ? 20: 0;
 
-		if (wait === false && this.requestNewCurrentElement <= 0) {
-			if (dx === 0) {
-				dx = this.dx;
-				this.dx = 0;
-			}
-			
+		if (this.requestElement <= 0) {
 			// current element:
 			if (this.ce === null) {
 				//this.ce = this.add(ElementFactory.getRandom(~~(Math.random() * 10), 0));
 				this.ce = this.add(ElementFactory.getRandom(4 + ~~(Math.random() * 1), 0));
-				this.ce.gravity = 20;
+				this.ce.free();
 			}
 
+			if (this.ce._toRemove === true) {
+				this.requestElement = cl.elementSpeed * 2;
+				this.ce.free();
+				this.ce = null;
+			} 
+
 			if (this.ce && this.ce.gravity === 0) {
+
+				var dx = this.dx;
+				this.dx = 0;
+				if (Input.keys.r) {
+					dx = 1;
+				} else if (Input.keys.l) {
+					dx = -1;
+				}
+
 				if ((this.delay -= dt) <= 0) {
 					this.delay = this.ceDelay;
-
+					
 					// check if move is possible
-					if (this.grid.get(e.x + dx, e.y + 1) > 0 || e.y === G.grid.r - 1) {
-						if (this.grid.get(e.x, e.y + 1) > 0) {
+					if (this.grid.get(this.ce.x + dx, this.ce.y + 1) > 0 || this.ce.y === G.grid.r - 1) {
+						if (this.grid.get(this.ce.x, this.ce.y + 1) > 0) {
 							// we can't move down
-							if (e.y === 0) {
+							if (this.ce.y === 0) {
 								// GAME OVER
 								this.gameOver = true;
-								document.getElementById('gameOver').style.display = "block";
+								document.$('gameOver').style.display = "block";
 								
 							} else {
-								this.requestNewCurrentElement = cl.elementSpeed * 2;	
+								this.dx = 0;
+								this.requestElement = cl.elementSpeed * 2;
 							}
-							
-							//e.gravity = 20
 							//var a = new Audio("hurt.wav");
 							//a.volume = 0.5;
 							//a.play();
 
 						} else {
-							e.cy += 1;//0.5;
+							this.ce.cy += 1;//0.5;
 						}
 					} else {
-						e.cx += dx;
-						e.cy += 1;// 0.5;
-					}					
+						this.ce.cx += dx;
+						this.ce.cy += 1;// 0.5;
+					}	
+					
+									
 				} else {
 					this.dx = dx;
 				}

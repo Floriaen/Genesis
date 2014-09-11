@@ -20,8 +20,14 @@ var Grass = _Element.extend({
 	},
 	update: function(dt) {
 		_Element.update.call(this, dt);
-		if (this.burned) {
-			this._type = Me.BURNED_GRASS;
+		var elAbove = G.get(this.x, this.y - 1);
+		if (elAbove) {
+			this.burned = elAbove.burned;
+		}
+		if (this.burned === true) {
+			this.type = Me.BURNED_GRASS;
+		} else {
+			this.type = Me.GRASS;
 		}
 	}
 });

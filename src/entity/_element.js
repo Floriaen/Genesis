@@ -34,6 +34,7 @@ var _Element = Base.extend({
 		this.pressure = 0;
 		this._selected = false;
 		this.blink = 0.1;
+		this.free = false;
 	},
 	set type (v) {
 		if (v !== this._type) {

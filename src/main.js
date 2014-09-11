@@ -10,6 +10,8 @@ var M = Math,
 	Z = 0.1, // Zero
 	sprite, startup, score, glasspane, level;
 
+document.$ = document.getElementById;
+
 var Me = {};
 Me.EMPTY = 0;
 Me.WATER = 1;
@@ -33,11 +35,13 @@ Me.CLOUD = 17;
 Me.g = [
 	Me.EARTH,
 	Me.EARTH,
-	Me.EARTH,
+	Me.WATER,
 	Me.WATER,
 	Me.WATER,
 	Me.FIRE,
 	Me.FIRE,
+	Me.AIR,
+	Me.AIR,
 	Me.AIR
 ];
 

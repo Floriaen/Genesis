@@ -4,8 +4,8 @@ var Water = _Element.extend({
 	initialize: function(x, y) {
 		_Element.initialize.call(this, x, y);
 		this.type = Me.WATER;
-		this.spriteAnim.push(15, 25, 35);
-		this.animSpeed = 0.63;
+		this.spriteAnim.push(15, 25, 35, 25);
+		this.animSpeed = 0.21;
 		this.sc = M.rand(3);
 		this.toIceCountDown = 2;
 	},
@@ -44,9 +44,13 @@ var Water = _Element.extend({
 				e.burned = false;
 			break;
 			case Me.PLANTS:
-				var n = this.replace(Plants);
-				n.burned = e.burned;
-				e.replace(HeadPlants);
+				if (e.burned === false) {
+					var n = this.replace(Plants);
+					e.replace(HeadPlants);	
+				} else {
+					G.remove(this);
+				}
+				
 			break;
 			case Me.HEAD_PLANTS:
 				//G.remove(this);

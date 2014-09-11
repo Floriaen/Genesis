@@ -29,8 +29,9 @@ var Lava = _Element.extend({
 				G.remove(e);
 			break;
 			case Me.EARTH:
-				if (e.pressure === 0) {
-					e.pressure = 3;
+				this.free();
+				if (e.selected === false) {
+					e.selected = true;	
 				}
 			break;
 		}
