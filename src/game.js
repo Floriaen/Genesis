@@ -1,6 +1,6 @@
 /* jshint unused: false */
 /* global _Element, ElementFactory, Me, Input, M, document.$, E, Grid, startup, sprite,
-Grass, score, Water, Flower, Grass, Earth, Region, Plants, Fire, Rock, Eye, Ice, HeadPlants, level, Lava, Canvas */
+Grass, score, Water, Flower, Grass, Earth, Region, Plants, Air, Fire, Rock, Eye, Ice, HeadPlants, level, Lava, Canvas */
 var G = {
 	width: 0,
 	height: 0,
@@ -17,7 +17,7 @@ var G = {
 	grid: null,
 
 	delay: 0,
-	ceDelay: 0.1,
+	ceDelay: 0.3,
 
 	ce: null,
 	requestElement: 0,
@@ -36,39 +36,7 @@ var G = {
 	shake: 0,
 
 	level: 0,
-	levels: [
-		{
-			elementCount: 30 / 4,
-			elementSpeed: 0.3,
-			c: "#23758C"
-		},
-		{
-			elementCount: 60 / 4,
-			elementSpeed: 0.29,
-			c: "#42B665"
-		},
-		{
-			elementCount: 90 / 4,
-			elementSpeed: 0.28,
-			c: "#E28A32"
-		},
-		{
-			elementCount: 120 / 4,
-			elementSpeed: 0.25,
-			c: "#E24A32"
-		},
-		{
-			elementCount: 130 / 4,
-			elementSpeed: 0.22,
-			c: "#9B1800"
-
-		},
-		{
-			elementCount: 150 / 4,
-			elementSpeed: 0.2,
-			c: "#2A0700"
-		}
-	],
+	increaseLevel: 20,
 
 	_initShadows: function() {
 		var e = null;
@@ -85,7 +53,11 @@ var G = {
 	},
 
 	load: function(onload) {
-		onload();
+		this.score = 0;
+		this.ceDelay = 0.3;
+		this.level = 1;
+		this.requestElement = 0.1;
+
 		this.grid = new Grid(this.sw / E, this.sh / E);
 		//this.add(Lava.new(3, this.grid.r - 1));
 		var i = 0;
@@ -123,8 +95,6 @@ var G = {
 		var l = this.entities.length;
 		for (i = 0; i < l; i++) {
 			c = this.entities[i];
-			//c.update(0);
-			//this.grid.set(c.x, c.y, c.type);
 		}
 
 		this.dx = 0;
@@ -132,7 +102,10 @@ var G = {
 		this.ent = Canvas.get(G.width, G.height);
 		this.ent2 = Canvas.get(G.width, G.height);
 
+		
 		this._initShadows();
+		this.gameOver = false;
+		onload();
 	},
 
 	// debug
@@ -165,7 +138,6 @@ var G = {
 	},
 
 	displayCount: function(x, y, v) {
-		console.log('displayCount', x, y, v);
 		var c = document.createElement('div');
 		c.innerHTML = '+ ' + v;
 		c.style.fontSize = '20px';
@@ -197,40 +169,51 @@ var G = {
 			var r = M.random();
 			if (r > 0.4) {
 				G.add(Earth.new(i, G.grid.r - 1));
-			} else if (r > 0.1) {
+			} else if (r > 0.2) {
 				G.add(Rock.new(i, G.grid.r - 1));
-		 	} else {
+		 	} else if (r > 0.1) {
 				G.add(Ice.new(i, G.grid.r - 1));
+			} else {
+				G.add(Air.new(i, G.grid.r - 1));
 			}
 		}
+	},
+
+	restart: function() {
+		// removeAll
+		this.entities = [];
+		// reset data
+		ElementFactory.c = 0;
+		this.load(function() {});
 	},
 
 	update: function(dt) {
 
 		if (this.gameOver === true) {
+			document.$('gameOver').style.display = "block";
+			if (Input.keys.s) {
+				this.restart();
+			}
 			return;
+		} else {
+			document.$('gameOver').style.display = "none";
 		}
 
 		if (this.shake > 0 && (this.shake -= dt) < 0) {
+			// Level up
 			this.shake = 0;
 			this.increaseRow();
+
+			this.ceDelay -= 0.05;
+			if (this.ceDelay < 0.18) {
+				this.ceDelay = 0.18;
+			}
+
+			this.level += 1;
 		}
 
 		var i = 0;
 
-		// levels up?
-		var cl = null;
-		for (i = this.level; i < this.levels.length - 1; i++) {
-			cl = this.levels[i];
-			if (ElementFactory.c > cl.elementCount) {
-				//console.log('UP', 'current', ElementFactory.c, 'limit', cl.elementCount);
-				this.level = i + 1;
-				break;
-			}
-		}
-		cl = this.levels[this.level];
-		this.ceDelay = cl.elementSpeed;
-		
 		if (this._cleanRequested) {
 			this._cleanRequested = false;
 			this._cleanEntities();
@@ -311,7 +294,7 @@ var G = {
 			}
 		}		
 
-		if (this.ce) this.ce.gravity = (Input.keys.d) ? 20: 0;
+		if (this.ce) this.ce.gravity = (Input.keys.d) ? 12: 0;
 
 		if (this.requestElement <= 0) {
 			// current element:
@@ -322,15 +305,17 @@ var G = {
 
 			if (this.ce._toRemove === true) {
 				this.dx = 0;
-				this.requestElement = cl.elementSpeed * 2;
+				this.requestElement = this.ceDelay;
 				this.ce.free();
 				this.ce = null;
-				if (ElementFactory.c > 0 && ElementFactory.c % 10 === 0) {
+				if (ElementFactory.c > 0 && ElementFactory.c % this.increaseLevel === 0) {
 					this.shake = 0.8;
 				}
+				this.increaseLevel += 5;
+				if (this.increaseLevel > 40) this.increaseLevel = 40;
 			} 
 
-			if (this.ce && this.ce.gravity === 0) {
+			if (this.ce) { //  && this.ce.gravity === 0
 
 				var dx = this.dx;
 				this.dx = 0;
@@ -349,9 +334,7 @@ var G = {
 							// we can't move down
 							if (this.ce.y === 0) {
 								// GAME OVER
-								this.gameOver = true;
-								document.$('gameOver').style.display = "block";
-								
+								this.gameOver = true;								
 							} else {
 								this.ce._toRemove = true;
 							}
@@ -374,7 +357,7 @@ var G = {
 			}
 		}
 
-		level.innerHTML = "LEVEL " + (this.level + 1);
+		level.innerHTML = "LEVEL " + (this.level);
 		score.innerHTML = this.score;
 	},
 	

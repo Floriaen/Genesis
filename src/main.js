@@ -34,7 +34,6 @@ Me.CLOUD = 17;
 // for random generation
 Me.g = [
 	Me.EARTH,
-	Me.EARTH,
 	Me.WATER,
 	Me.WATER,
 	Me.WATER,
@@ -53,7 +52,6 @@ function tic(dt) {
 	G.update(p);
 	G.render();
 	window.requestAnimationFrame(tic);
-
 	window.stats.end();
 }
 
@@ -94,10 +92,10 @@ window.onload = function() {
 	Canvas.pixelate(canvas);
 	G.context.scale(G.scale, G.scale);
 
+	G.sw = G.width / G.scale;
+	G.sh = G.height / G.scale;
 	G.load(function() {
 		window.requestAnimationFrame(tic);
-		G.sw = G.width / G.scale;
-		G.sh = G.height / G.scale;
 	});
 };
 

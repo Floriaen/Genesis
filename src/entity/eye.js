@@ -23,6 +23,8 @@ var Eye = _Element.extend({
 		this.cvs = Canvas.get(30, 20);
 		this.ctx = this.cvs.getContext('2d');
 
+		this.t = this.coords[this.sc];
+
 	},
 
 	onAnimLoop: function() {
