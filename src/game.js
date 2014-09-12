@@ -33,6 +33,8 @@ var G = {
 
 	dx: 0,
 
+	shake: 0,
+
 	level: 0,
 	levels: [
 		{
@@ -177,10 +179,41 @@ var G = {
 		}, 800);
 	},
 
+	increaseRow: function() {
+		var l = this.entities.length;
+		var i = 0;
+		for (i = 0; i < l; i++) {
+			var c = this.entities[i];
+			if (c.type !== 61) {
+				if (c.y - 1 < 0) {
+					c._toRemove = true;
+				} else {
+					c.y -= 1;	
+				}	
+			}
+		}
+		// add a line below:
+		for (i = 0; i < G.grid.c; i++) {
+			var r = M.random();
+			if (r > 0.4) {
+				G.add(Earth.new(i, G.grid.r - 1));
+			} else if (r > 0.1) {
+				G.add(Rock.new(i, G.grid.r - 1));
+		 	} else {
+				G.add(Ice.new(i, G.grid.r - 1));
+			}
+		}
+	},
+
 	update: function(dt) {
 
 		if (this.gameOver === true) {
 			return;
+		}
+
+		if (this.shake > 0 && (this.shake -= dt) < 0) {
+			this.shake = 0;
+			this.increaseRow();
 		}
 
 		var i = 0;
@@ -282,16 +315,19 @@ var G = {
 
 		if (this.requestElement <= 0) {
 			// current element:
-			if (this.ce === null) {
-				//this.ce = this.add(ElementFactory.getRandom(~~(Math.random() * 10), 0));
+			if (this.ce === null) {				
 				this.ce = this.add(ElementFactory.getRandom(4 + ~~(Math.random() * 1), 0));
 				this.ce.free();
 			}
 
 			if (this.ce._toRemove === true) {
+				this.dx = 0;
 				this.requestElement = cl.elementSpeed * 2;
 				this.ce.free();
 				this.ce = null;
+				if (ElementFactory.c > 0 && ElementFactory.c % 10 === 0) {
+					this.shake = 0.8;
+				}
 			} 
 
 			if (this.ce && this.ce.gravity === 0) {
@@ -317,8 +353,7 @@ var G = {
 								document.$('gameOver').style.display = "block";
 								
 							} else {
-								this.dx = 0;
-								this.requestElement = cl.elementSpeed * 2;
+								this.ce._toRemove = true;
 							}
 							//var a = new Audio("hurt.wav");
 							//a.volume = 0.5;
@@ -369,8 +404,15 @@ var G = {
 			}
 		}
 
+		if (this.shake > 0) {
+			this.context.save();
+			this.context.translate((0.5 - M.random()) * 3.4, (0.5 - M.random()) * 3.4);
+		}
+
 		this.context.drawImage(this.ent2, -4, 0);
 		this.context.drawImage(this.ent, 0, 0);
+
+		this.context.restore();
 	},
 
 	// ENGINE PART
