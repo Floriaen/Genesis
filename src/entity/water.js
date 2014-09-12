@@ -1,4 +1,4 @@
-/* global _Element, Me, G, Cloud, Grass, M, Air, Plants, HeadPlants, Rock, Ice, Flower */
+/* global _Element, Me, G, Cloud, Grass, M, Air, Plants, HeadPlants, Rock, Ice */
 /* jshint unused: false */
 var Water = _Element.extend({
 	initialize: function(x, y) {

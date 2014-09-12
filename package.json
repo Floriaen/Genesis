@@ -1,6 +1,6 @@
 {
-  "name": "Rush",
-  "title": "Rush",
+  "name": "genesis",
+  "title": "Genesis",
   "description": "js13k 2014 game",
   "version": "0.1.0",
   "homepage": "http://floriaen.fr/genesis",
@@ -13,7 +13,6 @@
     "type": "git",
     "url": "git://github.com/Florian/genesis.git"
   },
-  "bugs": "https://github.com/Florian/genesis/issues",
   "licenses": [
     {
       "type": "MIT",

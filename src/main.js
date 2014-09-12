@@ -45,8 +45,8 @@ Me.g = [
 ];
 
 function tic(dt) {
-  	var p = (dt - start) / 1000;
-  	start = dt;
+	var p = (dt - start) / 1000;
+	start = dt;
 
 	//window.stats.begin();
 	G.update(p);
@@ -82,11 +82,6 @@ window.onload = function() {
 	G.width = canvas.width;
 	G.height = canvas.height;
 	G.scale = 4;
-
-	// Add event listener for `click` events.
-	canvas.addEventListener('click', function(event) {
-        G.onclick(event.pageX, event.pageY);
-    });
 
 	G.context = canvas.getContext("2d");
 	Canvas.pixelate(canvas);

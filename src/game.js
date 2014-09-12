@@ -1,6 +1,6 @@
 /* jshint unused: false */
 /* global _Element, ElementFactory, Me, Input, M, document.$, E, Grid, startup, sprite,
-Grass, score, Water, Flower, aa, Grass, Earth, Region, Plants, Air, Fire, Rock, Eye, Ice, HeadPlants, level, Lava, Canvas */
+Grass, score, Water, aa, Grass, Earth, Region, Plants, Air, Fire, Rock, Eye, Ice, HeadPlants, level, Lava, Canvas */
 var G = {
 	width: 0,
 	height: 0,
@@ -106,24 +106,6 @@ var G = {
 		this._initShadows();
 		this.gameOver = false;
 		onload();
-	},
-
-	// debug
-	onclick: function(x, y) {
-		//console.log('click tile', x, y);
-		x = ~~(((x) / G.scale) / E);
-		y = ~~((y / G.scale) / E);
-		
-		var tr = -1;
-		var l = this.entities.length;
-		var e = null;
-		for (var i = 0; i < l; i++) {
-			e = this.entities[i];
-			if (e.x === x && e.y === y) {
-				this.remove(e);
-				break;
-			}
-		}
 	},
 
 	get: function(x, y) {
