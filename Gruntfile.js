@@ -77,8 +77,9 @@ module.exports = function(grunt) {
 			main: {
 				files: [
 					{expand: true, cwd: 'src/view/', src: ['*'], dest: 'dist/', filter: 'isFile'},
-					{expand: true, cwd: 'src/view/css/', src: ['*'], dest: 'dist/'},
+					//{expand: true, cwd: 'src/view/css/', src: ['*'], dest: 'dist/'},
 					{expand: true, cwd: 'libs/', src: ['*'], dest: 'dist/'},
+					{expand: true, cwd: 'assets/', src: ['triangle.png'], dest: 'dist/'},
 					{expand: true, cwd: 'assets/', src: ['sprite.png'], dest: 'dist/', rename: function(dest, src) {
 				        return dest + 'sprite.png';
 				    }},

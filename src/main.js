@@ -48,11 +48,11 @@ function tic(dt) {
   	var p = (dt - start) / 1000;
   	start = dt;
 
-	window.stats.begin();
+	//window.stats.begin();
 	G.update(p);
 	G.render();
 	window.requestAnimationFrame(tic);
-	window.stats.end();
+	//window.stats.end();
 }
 
 function addStats() {
@@ -68,7 +68,7 @@ function addStats() {
 }
 
 window.onload = function() {
-	addStats(); // debug
+	//addStats(); // debug
 	
 	level = document.getElementById('level');
 	score = document.getElementById('score');
@@ -96,6 +96,7 @@ window.onload = function() {
 	G.sh = G.height / G.scale;
 	G.load(function() {
 		window.requestAnimationFrame(tic);
+		G.gameOver = true;
 	});
 };
 

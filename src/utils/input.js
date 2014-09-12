@@ -11,6 +11,15 @@ var Input = {
 		if (c === 40) this.keys.d = d; //down
 
 		if (c === 32) this.keys.s = d; //space
+	},
+	onMouse: function(d, e) {
+		if (!e) e = window.event;
+		var c = false;
+		if (e.which) c = (e.which === 1);
+		else if (e.button) c = (e.button === 0);
+		if (c) {
+			this.mouse = d;
+		}
 	}
 };
 
@@ -21,4 +30,12 @@ document.onkeyup = function(e) {
 
 document.onkeydown = function(e) { 
 	Input.onKey(1, e); 
+};
+
+document.onmouseup = function(e){
+	Input.onMouse(0, e);
+};
+
+document.onmousedown = function(e){
+	Input.onMouse(1, e);
 };

@@ -1,6 +1,6 @@
 /* jshint unused: false */
 /* global _Element, ElementFactory, Me, Input, M, document.$, E, Grid, startup, sprite,
-Grass, score, Water, Flower, Grass, Earth, Region, Plants, Air, Fire, Rock, Eye, Ice, HeadPlants, level, Lava, Canvas */
+Grass, score, Water, Flower, aa, Grass, Earth, Region, Plants, Air, Fire, Rock, Eye, Ice, HeadPlants, level, Lava, Canvas */
 var G = {
 	width: 0,
 	height: 0,
@@ -53,6 +53,7 @@ var G = {
 	},
 
 	load: function(onload) {
+		ElementFactory.c = 0;
 		this.score = 0;
 		this.ceDelay = 0.3;
 		this.level = 1;
@@ -101,7 +102,6 @@ var G = {
 
 		this.ent = Canvas.get(G.width, G.height);
 		this.ent2 = Canvas.get(G.width, G.height);
-
 		
 		this._initShadows();
 		this.gameOver = false;
@@ -181,35 +181,40 @@ var G = {
 
 	restart: function() {
 		// removeAll
+		this.shake = 0;
 		this.entities = [];
-		// reset data
-		ElementFactory.c = 0;
 		this.load(function() {});
 	},
 
 	update: function(dt) {
-
 		if (this.gameOver === true) {
+			this.shake = 1;
 			document.$('gameOver').style.display = "block";
+			//if (Input.mouse) {
 			if (Input.keys.s) {
 				this.restart();
 			}
 			return;
 		} else {
 			document.$('gameOver').style.display = "none";
+			document.$('main').style.display = "none";
+			document.$('gameContent').style.display = "block";
 		}
 
-		if (this.shake > 0 && (this.shake -= dt) < 0) {
-			// Level up
-			this.shake = 0;
-			this.increaseRow();
+		if (this.shake > 0) {
+			aa.play('shake');
+			if ((this.shake -= dt) < 0) {
+				// Level up
+				this.shake = 0;
+				this.increaseRow();
 
-			this.ceDelay -= 0.05;
-			if (this.ceDelay < 0.18) {
-				this.ceDelay = 0.18;
+				this.ceDelay -= 0.05;
+				if (this.ceDelay < 0.18) {
+					this.ceDelay = 0.18;
+				}
+
+				this.level += 1;
 			}
-
-			this.level += 1;
 		}
 
 		var i = 0;
@@ -304,6 +309,7 @@ var G = {
 			}
 
 			if (this.ce._toRemove === true) {
+				aa.play('hurt');
 				this.dx = 0;
 				this.requestElement = this.ceDelay;
 				this.ce.free();
@@ -334,14 +340,10 @@ var G = {
 							// we can't move down
 							if (this.ce.y === 0) {
 								// GAME OVER
-								this.gameOver = true;								
+								this.gameOver = true;
 							} else {
 								this.ce._toRemove = true;
 							}
-							//var a = new Audio("hurt.wav");
-							//a.volume = 0.5;
-							//a.play();
-
 						} else {
 							this.ce.cy += 1;//0.5;
 						}

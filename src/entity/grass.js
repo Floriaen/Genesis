@@ -1,9 +1,9 @@
-/* global _Element, G, Me, M */
+/* global _Element, G, Me, M, Plants */
 /* jshint unused: false */
 var Grass = _Element.extend({
 	initialize: function(x, y) {
 		_Element.initialize.call(this, x, y);
-		this.cost = 2;
+		this.cost = 5;
 		this.type = Me.GRASS;
 	},
 	collide: function(e) {
@@ -23,6 +23,8 @@ var Grass = _Element.extend({
 		var elAbove = G.get(this.x, this.y - 1);
 		if (elAbove) {
 			this.burned = elAbove.burned;
+		} else {
+			G.add(Plants.new(this.x, this.y - 1));
 		}
 		if (this.burned === true) {
 			this.type = Me.BURNED_GRASS;
