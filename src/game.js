@@ -36,7 +36,7 @@ var G = {
 	shake: 0,
 
 	level: 0,
-	increaseLevel: 20,
+	increaseLevel: 15,
 
 	_initShadows: function() {
 		var e = null;
@@ -55,7 +55,7 @@ var G = {
 	load: function(onload) {
 		ElementFactory.c = 0;
 		this.score = 0;
-		this.ceDelay = 0.3;
+		this.ceDelay = 0.4;
 		this.level = 1;
 		this.requestElement = 0.1;
 
@@ -191,8 +191,8 @@ var G = {
 				this.increaseRow();
 
 				this.ceDelay -= 0.05;
-				if (this.ceDelay < 0.18) {
-					this.ceDelay = 0.18;
+				if (this.ceDelay < 0.24) {
+					this.ceDelay = 0.24;
 				}
 
 				this.level += 1;
@@ -213,7 +213,9 @@ var G = {
 		this.grid.empty();
 		for (i = 0; i < l; i++) {
 			c = this.entities[i];
-			this.grid.set(c.x, c.y, c.type);
+			if (c.type !== 61) {
+				this.grid.set(c.x, c.y, c.type);
+			}
 		}
 
 		for (i = 0; i < l; i++) {
@@ -223,18 +225,15 @@ var G = {
 
 		// update to know if some block must be changed
 		if ((this.collideDelay -= dt) < 0) {
-			this.collideDelay = 0.2;
+			this.collideDelay = 0.1;
 			var t = 0;
 			for (i = 0; i < l; i++) {
 				c = this.entities[i];
+
 				if (!c.selected) {
-					t = this.grid.get(c.x, c.y + 1);
-					// test the entity above each one:
-					if (t !== 0) {
-						var ne = this.get(c.x, c.y + 1);
-						if (ne) {
-							c.collide(ne);	
-						}
+					var ne = this.get(c.x, c.y + 1);
+					if (ne) {
+						c.collide(ne);	
 					}
 				}
 			}	
@@ -281,7 +280,7 @@ var G = {
 			}
 		}		
 
-		if (this.ce) this.ce.gravity = (Input.keys.d) ? 12: 0;
+		if (this.ce) this.ce.gravity = (Input.keys.d) ? 20: 0;
 
 		if (this.requestElement <= 0) {
 			// current element:
@@ -290,7 +289,7 @@ var G = {
 				this.ce.free();
 			}
 
-			if (this.ce._toRemove === true) {
+			if (this.ce.dispose === true) {
 				aa.play('hurt');
 				this.dx = 0;
 				this.requestElement = this.ceDelay;
@@ -299,11 +298,9 @@ var G = {
 				if (ElementFactory.c > 0 && ElementFactory.c % this.increaseLevel === 0) {
 					this.shake = 0.8;
 				}
-				this.increaseLevel += 5;
-				if (this.increaseLevel > 40) this.increaseLevel = 40;
 			} 
 
-			if (this.ce) { //  && this.ce.gravity === 0
+			if (this.ce && this.ce.gravity === 0) {
 
 				var dx = this.dx;
 				this.dx = 0;
@@ -324,17 +321,15 @@ var G = {
 								// GAME OVER
 								this.gameOver = true;
 							} else {
-								this.ce._toRemove = true;
+								this.ce.dispose = true;
 							}
 						} else {
-							this.ce.cy += 1;//0.5;
+							this.ce.cy += 1;
 						}
 					} else {
 						this.ce.cx += dx;
-						this.ce.cy += 1;// 0.5;
-					}	
-					
-									
+						this.ce.cy += 1;
+					}			
 				} else {
 					this.dx = dx;
 				}
@@ -373,7 +368,7 @@ var G = {
 
 		if (this.shake > 0) {
 			this.context.save();
-			this.context.translate((0.5 - M.random()) * 3.4, (0.5 - M.random()) * 3.4);
+			this.context.translate((0.5 - M.random()) * 6, (0.5 - M.random()) * 3.4);
 		}
 
 		this.context.drawImage(this.ent2, -4, 0);
@@ -402,5 +397,6 @@ var G = {
 	remove: function(e) {
 		this._cleanRequested = true;
 		e._toRemove = true;
+		e.dispose = true;
 	}
 };

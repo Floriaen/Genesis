@@ -24,7 +24,7 @@ var Grass = _Element.extend({
 		if (elAbove) {
 			this.burned = elAbove.burned;
 		} else {
-			G.add(Plants.new(this.x, this.y - 1));
+			//G.add(Plants.new(this.x, this.y - 1));
 		}
 		if (this.burned === true) {
 			this.type = Me.BURNED_GRASS;

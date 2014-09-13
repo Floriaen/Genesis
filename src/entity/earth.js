@@ -17,20 +17,15 @@ var Earth = _Element.extend({
 				e.replace(Earth);
 			break;
 			case Me.AIR:
-				this.free();
+				//this.free();
 				if (e.selected === false) {
 					e.selected = true;	
 				}
-				/*
-				if (e.pressure === 0) {
-					e.pressure = 3;
-				}
-				*/
 			break;
 			case Me.HEAD_PLANTS:
 			case Me.PLANTS:
 				G.remove(e);
-				this.y += 1;
+				//this.y += 1;
 			break;
 		}
 		return e;

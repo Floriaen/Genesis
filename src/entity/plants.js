@@ -3,12 +3,8 @@
 var Plants = _Element.extend({
 	initialize: function(x, y) {
 		_Element.initialize.call(this, x, y);
+		this.cost = 3;
 		this.type = Me.PLANTS;
-		/*
-		if (M.random() > 0.5) {
-			this.type = Me.FLOWER;
-		}
-		*/
 	},
 	update: function(dt) {
 		_Element.update.call(this, dt);

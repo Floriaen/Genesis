@@ -24,7 +24,7 @@ var _Element = Base.extend({
 		this.w = E;
 		this.h = E;
 
-		this.gravity = 10;
+		this.gravity = 16;
 
 		this._type = 0;
 		this._oType = 0;
@@ -34,7 +34,8 @@ var _Element = Base.extend({
 		this.pressure = 0;
 		this._selected = false;
 		this.blink = 0.1;
-		this.free = false;
+
+		this.dispose = false;
 	},
 	set type (v) {
 		if (v !== this._type) {
@@ -63,7 +64,7 @@ var _Element = Base.extend({
 	},
 
 	free: function() {
-		this.gravity = 10;
+		this.gravity = 16;
 	},
 
 	onAnimLoop: function() {
@@ -88,19 +89,16 @@ var _Element = Base.extend({
 			}
 		} 
 
-		if (this.pressure > 0) {
-			if ((this.pressureDelay -= dt) <= 0) {
-				this.pressureDelay = 0.5;
-				if ((this.pressure -= 1) <= 0) {
-					G.remove(this);
-				}
+		if (this.gravity === 0) {
+			if (this.cy > this.y) {
+				this.y += 1;
 			}
 		}
 
 		// init
 		if (this.y < G.grid.r - 1) {
 			if (G.grid.get(this.x, this.y + 1) === 0) {
-				this.cy += this.gravity * dt;
+				this.cy += this.gravity * dt + (this.y * 0.1) * dt;
 				if (this.cy > this.y) {
 					this.y += 1;
 				}
@@ -108,13 +106,21 @@ var _Element = Base.extend({
 				this.cy = this.y;
 			}
 		} else {
-			this.y = G.grid.r - 1;
-			this.cy = this.y;
+			this.cy = this.y = G.grid.r - 1;
 		}
 
 		if (this.selected) {
 			if ((this.blink -= dt) < 0) {
 				this.blink = 0.1;
+			}
+		}
+
+		if (this.pressure > 0) {
+			if ((this.pressureDelay -= dt) <= 0) {
+				this.pressureDelay = 0.5;
+				if ((this.pressure -= 1) <= 0) {
+					G.remove(this);
+				}
 			}
 		}
 	},

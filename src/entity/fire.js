@@ -15,18 +15,21 @@ var Fire = _Element.extend({
 				this.replace(Cloud);
 			break;
 			case Me.GRASS:
-				e.replace(Earth);
+				e.burned = true;
+				G.remove(this);
 			break;
 			case Me.AIR:
 			case Me.HEAD_PLANTS:
 				G.remove(e);
 			break;
 			case Me.PLANTS:
-				if (e.burned) {
-					G.remove(e);
-				} else {
+
+				var elBelow = G.grid.get(e.x, e.y + 1);
+				if (elBelow === Me.GRASS || elBelow === Me.BURNED_GRASS) {
 					e.burned = true;
-					G.remove(this);	
+					G.remove(this);
+				} else {
+					G.remove(e);
 				}
 			break;
 			case Me.ICE:

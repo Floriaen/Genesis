@@ -39,7 +39,7 @@ Me.g = [
 	Me.WATER,
 	Me.FIRE,
 	Me.FIRE,
-	Me.AIR,
+	Me.FIRE,
 	Me.AIR,
 	Me.AIR
 ];

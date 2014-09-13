@@ -3,7 +3,7 @@
 var Lava = _Element.extend({
 	initialize: function(x, y) {
 		_Element.initialize.call(this, x, y);
-		this.cost = 2;
+		this.cost = 5;
 		this.type = Me.LAVA;
 		this.spriteAnim.push(10, 20, 30);
 		this.sc = M.rand(3);

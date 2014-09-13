@@ -11,15 +11,16 @@ var Water = _Element.extend({
 	},
 	update: function(dt) {
 		_Element.update.call(this, dt);
+		/*
 		var elAbove = G.grid.get(this.x, this.y + 1);
-		if (elAbove && elAbove.type === Me.ROCK) {
-			//console.log('COUNTDOWN');
+		if (elAbove === Me.ROCK) {
 			if ((this.toIceCountDown -= dt) < 0) {
 				this.replace(Ice);
 			}	
 		} else {
 			this.toIceCountDown = 2;
 		}
+		*/
 	},
 	collide: function(e) {
 		//_Element.collide.call(this, e);

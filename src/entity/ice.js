@@ -3,7 +3,7 @@
 var Ice = _Element.extend({
 	initialize: function(x, y) {
 		_Element.initialize.call(this, x, y);
-		this.cost = 2;
+		this.cost = 3;
 		this.type = Me.ICE;
 	},
 	collide: function(e) {
