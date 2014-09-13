@@ -286,7 +286,7 @@ var G = {
 			// current element:
 			if (this.ce === null) {				
 				this.ce = this.add(ElementFactory.getRandom(4 + ~~(Math.random() * 1), 0));
-				this.ce.free();
+				this.ce.gravity = 0;
 			}
 
 			if (this.ce.dispose === true) {
@@ -300,7 +300,7 @@ var G = {
 				}
 			} 
 
-			if (this.ce && this.ce.gravity === 0) {
+			if (this.ce && (this.ce.y <= 1 || this.ce.gravity === 0 || (this.grid.get(this.ce.x, this.ce.y + 1) > 0))) {
 
 				var dx = this.dx;
 				this.dx = 0;
