@@ -81,7 +81,8 @@ Grid.prototype = {
 				}
 			}
 		} catch (e) {
-			console.log(e);
+			console.error('Error in getChain (vertical):', e);
+			throw e;
 		}
 		
 
